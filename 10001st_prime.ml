@@ -20,16 +20,15 @@ let non_primes limit =
 
 let primes limit =
   let np = non_primes limit in
-  List.rev
-    (Set.fold
-       (Set.diff
-          (List.fold_left
-             (List.init (limit - 1) ~f:(fun x -> x + 2))
-             ~init:(Set.empty (module Int))
-             ~f:Set.add)
-          np)
-       ~init:[]
-       ~f:(fun lst elt -> elt :: lst))
+  Set.fold_right
+    (Set.diff
+       (List.fold_left
+          (List.init (limit - 1) ~f:(fun x -> x + 2))
+          ~init:(Set.empty (module Int))
+          ~f:Set.add)
+       np)
+    ~init:[]
+    ~f:(fun elt lst -> elt :: lst)
 
 let ith_prime i =
   let p = primes 1_000_000 in
